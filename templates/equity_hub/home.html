@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block title %}{% endblock%}
+{% load static %}
+
+<link type="text/css" href="{% static 'css/main.9f782baf.css' %}" rel="stylesheet">
+
+{% block content %}
+    <div class="h-100 container-fluid">
+        <div class="h-100 mt-3 row">
+            <div class="row">
+                <h4>List of Stock Holdings.</h4>
+                <div class="ms-3">
+                    <form method="POST" action="{% url 'register' %}">
+                        {% csrf_token %}
+                        <input type="text" name="ticker_symbol" placeholder="Equity Symbol Number.">
+                        <button type="submit">登録</button>
+                    </form>
+                </div>
+                <div class="m-3 col-12">
+                    <ul class="list-group list-group-horizontal">
+                        <li class="list-group-item col active" aria-current="true">銘柄名(コード)</li>
+                        <li class="list-group-item col active" aria-current="true">現在価値(円)</li>
+                        <li class="list-group-item col active" aria-current="true">配当予想(%)</li>
+                        <li class="list-group-item col active" aria-current="true">現在持有数</li>
+                        <li class="list-group-item col active" aria-current="true">配当予想額(円)</li>
+                        <li class="list-group-item col active" aria-current="true">配当額/全体配当額</li>
+                        <li class="list-group-item col active" aria-current="true">購入数</li>
+                        <li class="list-group-item col active" aria-current="true">購入後配当額/全体配当額</li>
+                    </ul>
+                    {% for content in equity_hubs %}
+                        <ul class="list-group list-group-horizontal">
+                            <li class="list-group-item col">{{ content.name }}({{ content.symbol }})
+                            </li>
+                            <li class="list-group-item col">{{ content.price }}</li>
+                            <li class="list-group-item col">{{ content.dividend_yield }}</li>
+                            <li class="list-group-item col">{{ content.shares_owned }}</li>
+                            <li class="list-group-item col">{{ content.dividend_expected }}</li>
+                            <li class="list-group-item col">配当額/全体配当額を表示</li>
+                            <li class="list-group-item col">購入数を表示</li>
+                            <li class="list-group-item col">購入後配当額/全体配当額を表示</li>
+                        </ul>
+                    {% endfor %}
+                </div>
+                <div class="ms-3 d-md-flex justify-content-md-start">
+                    <p class="text-center">差額</p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
