@@ -60,3 +60,7 @@ pip install django-cors-headers
 
 # トークン用Migrations
 python manage.py makemigrations authtoken
+
+# gunicorn で 静的ファイルを公開す
+pip install gunicorn
+pip install Whitenoise
