@@ -1,5 +1,5 @@
 import os
-import boto3
+import requests
 
 from pathlib import Path
 
@@ -16,33 +16,14 @@ SECRET_KEY = "django-insecure-7bfg+!vuhle9zyh)w^b$l8=-*3_r&)giznb8d*84l=s(x!s%t&
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-def get_ec2_public_ip():
-    try:
-        session = boto3.Session()
-        ec2 = session.client('ec2', region_name=os.environ.get('AWS_REGION', 'us-northeast-1'))
-        instance_id = os.environ.get('EC2_INSTANCE_ID')
-
-        if not instance_id:
-            # EC2インスタンスのメタデータから取得
-            import requests
-            metadata_url = "http://169.254.169.254/latest/meta-data/"
-            instance_id = requests.get(metadata_url + "instance-id").text
-
-        # インスタンスの情報を取得
-        response = ec2.describe_instances(InstanceIds=[instance_id])
-        return response['Reservations'][0]['Instances'][0]['PublicIpAddress']
-    except Exception as e:
-        print(f"Error fetching public IP: {e}")
-        return None
-
 
 # ALLOWED_HOSTS を動的に設定
-EC2_PUBLIC_IP = get_ec2_public_ip()
-if EC2_PUBLIC_IP:
-    ALLOWED_HOSTS = [EC2_PUBLIC_IP, "127.0.0.1", "localhost"] # ネット経由, ローカル, ホスト名
-else:
-    ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
+try:
+    EC2_PUBLIC_IP = requests.get("http://169.254.169.254/latest/meta-data/public-ipv4", timeout=2).text
+except requests.RequestException:
+    EC2_PUBLIC_IP = ""
 
+ALLOWED_HOSTS = [EC2_PUBLIC_IP, "127.0.0.1", "localhost"]# ネット経由, ローカル, ホスト名
 
 # Application definition
 INSTALLED_APPS = [
