@@ -19,7 +19,7 @@ DEBUG = True
 def get_ec2_public_ip():
     try:
         session = boto3.Session()
-        ec2 = session.client('ec2', region_name=os.environ.get('AWS_REGION', 'us-east-1'))
+        ec2 = session.client('ec2', region_name=os.environ.get('AWS_REGION', 'us-northeast-1'))
         instance_id = os.environ.get('EC2_INSTANCE_ID')
 
         if not instance_id:
