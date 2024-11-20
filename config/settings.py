@@ -16,14 +16,7 @@ SECRET_KEY = "django-insecure-7bfg+!vuhle9zyh)w^b$l8=-*3_r&)giznb8d*84l=s(x!s%t&
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-
-# ALLOWED_HOSTS を動的に設定
-try:
-    EC2_PUBLIC_IP = requests.get("http://169.254.169.254/latest/meta-data/public-ipv4", timeout=2).text
-except requests.RequestException:
-    EC2_PUBLIC_IP = ""
-
-ALLOWED_HOSTS = [EC2_PUBLIC_IP, "127.0.0.1", "localhost"]# ネット経由, ローカル, ホスト名
+ALLOWED_HOSTS = [] # EC2 サービス起動時に自動取得(update_settings.py)
 
 # Application definition
 INSTALLED_APPS = [
