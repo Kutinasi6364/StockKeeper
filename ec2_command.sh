@@ -15,7 +15,7 @@ pip install whitenoise
 
 gunicorn StockKeeper.config.wsgi:application --bind 0.0.0.0:8000
 
-# ln: シンベリックリンク -> /etc/nginx/sites-enabled sites-enabled が設定で反映される
+# ln: シンボリックリンク -> /etc/nginx/sites-enabled sites-enabled が設定で反映される
 sudo ln -s /etc/nginx/sites-available/stockkeeper /etc/nginx/sites-enabled
 sudo nginx -t  # 設定テスト
 sudo systemctl restart nginx
